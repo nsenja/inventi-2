@@ -17,6 +17,7 @@ class BarangController extends Controller
     {
         $barang = Barang::with('kategori')->get();
         return view('admin.barang.index', compact('barang'));
+        
     }
 
     /**
@@ -79,8 +80,11 @@ class BarangController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
-        //
+    {       
+    $categories = Kategori::all();
+    $barang = Barang::with('kategori')->findOrFail($id);
+
+    return view('admin.barang.edit', compact('barang', 'categories'));
     }
 
     /**
@@ -92,8 +96,28 @@ class BarangController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+    $request->validate([
+        'category_id'   => 'required|exists:categories,id',
+        'nama_barang'   => 'required|string|max:255',
+        'kode_barang'   => 'required|string|max:100|unique:barangs,kode_barang,' . $id,
+        'jumlah'        => 'required|integer|min:0',
+        'kondisi'       => 'required|in:baik,rusak,diperbaiki',
+        'deskripsi'     => 'nullable|string'
+    ]);
+
+    $barang = Barang::findOrFail($id);
+    $barang->update([
+        'category_id'   => $request->category_id,
+        'nama_barang'   => $request->nama_barang,
+        'kode_barang'   => $request->kode_barang,
+        'jumlah'        => $request->jumlah,
+        'kondisi'       => $request->kondisi,
+        'deskripsi'     => $request->deskripsi,
+    ]);
+
+    return redirect()->route('barang.index')->with('success', 'Data barang berhasil diperbarui.');
     }
+ 
 
     /**
      * Remove the specified resource from storage.
@@ -101,8 +125,9 @@ class BarangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Barang $barang)
     {
-        //
+        $barang->delete();
+        return redirect()->route('barang.index')->with('success', 'Barang berhasil dihapus');
     }
 }

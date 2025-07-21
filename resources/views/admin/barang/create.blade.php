@@ -100,7 +100,7 @@
 
 
                                 <div class="d-flex justify-content-start gap-2 mt-3">
-                                    <button type="submit" class="btn btn-success btn-sm mr-2">
+                                    <button type="submit" class="btn btn-success btn-sm">
                                         <i class="fas fa-save me-1"></i> Simpan
                                     </button>
                                     <a href="{{ route('barang.index') }}" class="btn btn-secondary btn-sm">

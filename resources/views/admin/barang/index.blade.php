@@ -44,17 +44,17 @@
                                                 <td class="text-center">{{ $item->kondisi }}</td>
                                                 <td class="text-center" style="width: 150px;">
                                                     <div class="d-flex justify-content-center ">
-                                                        <a href="{{ route('kategori.edit', $item->id) }}"
+                                                        <a href="{{ route('barang.edit', $item->id) }}"
                                                             class="btn btn-warning btn-sm mr-2">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
 
-                                                        <form action="{{ route('kategori.destroy', $item->id) }}"
+                                                        <form action="{{ route('barang.destroy', $item->id) }}"
                                                             method="POST">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-danger btn-sm"
-                                                                onclick="return confirm('Yakin ingin menghapus kategori ini?')">
+                                                                onclick="return confirm('Yakin ingin menghapus barang ini?')">
                                                                 <i class="fas fa-trash"></i>
                                                             </button>
                                                         </form>
