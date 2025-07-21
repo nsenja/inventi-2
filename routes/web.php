@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KategoriController;
-use App\Models\Kategori;
+use App\Http\Controllers\BarangController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,7 @@ Route::get('/', function () {
 
 
 Route::resource('kategori', KategoriController::class);
-Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.index');
-Route::get('/kategori/create', [KategoriController::class, 'create'])->name('kategori.create');
+// Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.index');
+// Route::get('/kategori/create', [KategoriController::class, 'create'])->name('kategori.create');
+Route::resource('barang', BarangController::class);
 

@@ -8,12 +8,12 @@
             <div id="content">
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+               <div class="container-fluid">
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="m-0 font-weight-bold text-primary">Kategori</h6>
-                                <a href="{{ route('kategori.create') }}" class="btn btn-primary btn-sm">
+                                <h6 class="m-0 font-weight-bold text-primary">Barang</h6>
+                                <a href="{{ route('barang.create') }}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-plus me-1"></i> Tambah
                                 </a>
                             </div>
@@ -26,14 +26,22 @@
                                             <tr>
                                                 <th class="text-center" style="width: 50px;">No</th>
                                                 <th class="text-center">Nama Kategori</th>
+                                                <th class="text-center">Nama Barang</th>
+                                                <th class="text-center">Kode Barang</th>
+                                                <th class="text-center">Jumlah</th>
+                                                <th class="text-center">Kondisi</th>
                                                 <th class="text-center">Aksi</th>
                                             </tr>
                                         </thead>
 
-                                        @foreach ($kategoris as $index => $item)
+                                        @foreach ($barang as $index => $item)
                                             <tr>
                                                 <td class="text-center" style="width: 50px;">{{ $index + 1 }}</td>
-                                                <td class="text-center">{{ $item->nama_kategori }}</td>
+                                                <td class="text-center">{{ $item->kategori->nama_kategori }}</td>
+                                                <td class="text-center">{{ $item->nama_barang }}</td>
+                                                <td class="text-center">{{ $item->kode_barang }}</td>
+                                                <td class="text-center">{{ $item->jumlah }}</td>
+                                                <td class="text-center">{{ $item->kondisi }}</td>
                                                 <td class="text-center" style="width: 150px;">
                                                     <div class="d-flex justify-content-center ">
                                                         <a href="{{ route('kategori.edit', $item->id) }}"
