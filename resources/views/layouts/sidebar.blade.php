@@ -1,42 +1,75 @@
 <div id="wrapper">
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/') }}">
-        {{-- <div class="sidebar-brand-icon rotate-n-15">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/') }}">
+            {{-- <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div> --}}
-        <div class="sidebar-brand-text mx-3">Inventi</div>
-    </a>
-
-    <hr class="sidebar-divider my-0">
-
-    <li class="nav-item active">
-        <a class="nav-link" href="{{ url('/') }}">
-            <i class="fas fa-fw fa-archive"></i>
-            <span>Dashboard</span>
+            <div class="sidebar-brand-text mx-3">Inventi</div>
         </a>
-    </li>
-    
-    <li class="nav-item active">
-        <a class="nav-link" href="{{ url('/kategori') }}">
-            <i class="fas fa-fw fa-tags"></i>
-            <span>Kategori Barang</span>
-        </a>
-    </li>
 
-      <li class="nav-item active">
-        <a class="nav-link" href="{{ url('/barang') }}">
-            <i class="fas fa-fw fa-box"></i>
-            <span>Barang</span>
-        </a>
-    </li>
+        <hr class="sidebar-divider my-0">
 
-</ul>
+        <li class="nav-item active">
+            <a class="nav-link" href="{{ url('/') }}">
+                <i class="fas fa-fw fa-archive"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
 
-      
+        <li class="nav-item active">
+            <a class="nav-link" href="{{ url('/kategori') }}">
+                <i class="fas fa-fw fa-tags"></i>
+                <span>Kategori Barang</span>
+            </a>
+        </li>
 
-        
-            <!-- Nav Item - Pages Collapse Menu -->
-            {{-- <li class="nav-item">
+        <li class="nav-item active">
+            <a class="nav-link" href="{{ url('/barang') }}">
+                <i class="fas fa-fw fa-box"></i>
+                <span>Barang</span>
+            </a>
+        </li>
+
+        {{-- Barang Masuk --}}
+        <li class="nav-item active">
+            <a class="nav-link" href="{{ url('/barang-masuk') }}">
+                <i class="fas fa-inbox"></i>
+                <span>Barang Masuk</span>
+            </a>
+        </li>
+
+        {{-- Barang Keluar --}}
+        <li class="nav-item active">
+            <a class="nav-link" href="{{ url('/barang-keluar') }}">
+                <i class="fas fa-box-open"></i> 
+                <span>Barang Keluar</span>
+            </a>
+        </li>
+
+        <li class="nav-item active">
+            <a class="nav-link" href="{{ url('/laporan') }}">
+                <i class="fas fa-fw fa-file-alt"></i>
+                <span>Laporan</span>
+            </a>
+        </li>
+
+        <li class="nav-item active">
+            <a class="nav-link" href="{{ url('/pengaturan') }}">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Pengaturan</span>
+            </a>
+        </li>
+
+        {{-- Divider --}}
+        <hr class="sidebar-divider d-none d-md-block">
+
+    </ul>
+
+
+
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    {{-- <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
@@ -86,4 +119,4 @@
             </div>
 
         </ul> --}}
-        <!-- End of Sidebar -->
+    <!-- End of Sidebar -->

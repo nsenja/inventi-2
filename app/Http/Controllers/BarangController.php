@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kategori;
 use App\Models\Barang;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class BarangController extends Controller
 {
@@ -19,6 +20,7 @@ class BarangController extends Controller
         return view('admin.barang.index', compact('barang'));
         
     }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -130,4 +132,20 @@ class BarangController extends Controller
         $barang->delete();
         return redirect()->route('barang.index')->with('success', 'Barang berhasil dihapus');
     }
+
+    public function cetak(Request $request)
+    {
+    $query = Barang::with('kategori');
+
+    if ($request->filled('kategori_id')) {
+        $query->where('kategori_id', $request->kategori_id);
+    }
+
+    $barang = $query->orderBy('nama')->get();
+
+    $pdf = PDF::loadView('laporan.barang_pdf', compact('barang'));
+
+    return $pdf->download('laporan-barang.pdf');
+}
+
 }
