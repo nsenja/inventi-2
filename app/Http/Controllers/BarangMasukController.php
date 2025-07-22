@@ -15,8 +15,10 @@ class BarangMasukController extends Controller
      */
     public function index()
     {
-        $barangMasuk = BarangMasuk::with('barang')->get();
-        return view('admin.barangMasuk.index', compact('barang'));
+        $barangMasuk = BarangMasuk::with('barang.kategori')->get();
+        return view('admin.barangMasuk.index', compact('barangMasuk'));
+        // $barangMasuk = BarangMasuk::with('barang')->get();
+        // return view('admin.barangMasuk.index', compact('barangMasuk'));
     }
 
     /**

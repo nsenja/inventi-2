@@ -12,7 +12,7 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="m-0 font-weight-bold text-primary">Barang</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Barang Masuk</h6>
                                 <a href="{{ route('barang.create') }}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-plus me-1"></i> Tambah
                                 </a>
@@ -25,23 +25,38 @@
                                         <thead class="table-white">
                                             <tr>
                                                 <th class="text-center" style="width: 50px;">No</th>
-                                                <th class="text-center">Nama Kategori</th>
+                                                {{-- <th class="text-center">id_barang</th> --}}
+                                                 <th class="text-center">Tanggal Masuk</th>
+                                                <th class="text-center">Kategori</th>
                                                 <th class="text-center">Nama Barang</th>
                                                 <th class="text-center">Kode Barang</th>
                                                 <th class="text-center">Jumlah</th>
-                                                <th class="text-center">Kondisi</th>
+                                                <th class="text-center">Catatan</th>
+                                                <th class="text-center">Bukti</th>
                                                 <th class="text-center">Aksi</th>
                                             </tr>
                                         </thead>
 
-                                        @foreach ($barang as $index => $item)
+                                        @foreach ($barangMasuk as $index => $item)
                                             <tr>
                                                 <td class="text-center" style="width: 50px;">{{ $index + 1 }}</td>
-                                                <td class="text-center">{{ $item->kategori->nama_kategori }}</td>
-                                                <td class="text-center">{{ $item->nama_barang }}</td>
-                                                <td class="text-center">{{ $item->kode_barang }}</td>
-                                                <td class="text-center">{{ $item->jumlah }}</td>
-                                                <td class="text-center">{{ $item->kondisi }}</td>
+                                                {{-- <td class="text-center">{{ $item->barang->id }}</td> --}}
+                                                <td class="text-center">{{ $item->tanggal_masuk }}</td>
+                                                <td class="text-center">{{ $item->barang->kategori->nama_kategori }}</td>
+                                                <td class="text-center">{{ $item->barang->nama_barang }}</td>
+                                                <td class="text-center">{{ $item->barang->kode_barang }}</td>
+                                                <td class="text-center">{{ $item->barang->jumlah }}</td>
+                                                <td class="text-center">{{ $item->catatan }}</td>
+                                                <td class="text-center">
+                                                    @if ($item->bukti)
+                                                        <a href="{{ asset('storage/' . $item->bukti) }}" target="_blank">
+                                                            <img src="{{ asset('storage/' . $item->bukti) }}"
+                                                                alt="Bukti Barang Masuk" style="width: 50px; height: 50px;">
+                                                        </a>
+                                                    @else
+                                                        Tidak ada bukti
+                                                    @endif
+                                                
                                                 <td class="text-center" style="width: 150px;">
                                                     <div class="d-flex justify-content-center ">
                                                         <a href="{{ route('barang.edit', $item->id) }}"
