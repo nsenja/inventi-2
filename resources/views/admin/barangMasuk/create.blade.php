@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', 'Form Barang Masuk')
 
 @section('content')
     <div class="container-fluid">
@@ -12,7 +13,7 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="m-0 font-weight-bold text-primary">Tambah Barang</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Tambah Barang Masuk</h6>
                             </div>
                         </div>
 
@@ -74,8 +75,7 @@
 
                                 {{-- Tanggal Masuk --}}
                                 <div class="mb-3">
-                                    <label for="tanggal_masuk" class="form-label
-">Tanggal Masuk</label>
+                                    <label for="tanggal_masuk" class="form-label">Tanggal Masuk</label>
                                     <input type="date" name="tanggal_masuk" id="tanggal_masuk"
                                         class="form-control @error('tanggal_masuk') is-invalid @enderror"
                                         value="{{ old('tanggal_masuk', now()->format('Y-m-d')) }}">
@@ -95,7 +95,7 @@
                                 </div>
 
                                 {{-- Bukti --}}
-                                <div class="mb-3">
+                                <div class="mb-4">
                                     <label for="bukti" class="form-label">Bukti Barang Masuk</label>
                                     <input type="file" name="bukti" id="bukti"
                                         class="form-control @error('bukti') is-invalid @enderror">
@@ -104,12 +104,14 @@
                                     @enderror
                                 </div>
 
+                                {{-- Validasi CSRF --}}
+
                                 {{-- Tombol Simpan --}}
                                 <div class="d-flex justify-content-start gap-2 mt-3">
-                                    <button type="submit" class="btn btn-success btn-sm">
+                                    <button type="submit" class="btn btn-success btn-sm mr-2">
                                         <i class="fas fa-save me-1"></i> Simpan
                                     </button>
-                                    <a href="{{ route('barangMasuk.index') }}" class="btn btn-secondary btn-sm">
+                                    <a href="{{ route('barang-masuk.index') }}" class="btn btn-secondary btn-sm">
                                         Kembali
                                     </a>
                                 </div>

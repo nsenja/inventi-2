@@ -13,7 +13,7 @@
                         <div class="card-header py-3">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h6 class="m-0 font-weight-bold text-primary">Barang Masuk</h6>
-                                <a href="{{ route('barang.create') }}" class="btn btn-primary btn-sm">
+                                <a href="{{ route('barang-masuk.create') }}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-plus me-1"></i> Tambah
                                 </a>
                             </div>
@@ -59,12 +59,12 @@
                                                 
                                                 <td class="text-center" style="width: 150px;">
                                                     <div class="d-flex justify-content-center ">
-                                                        <a href="{{ route('barang.edit', $item->id) }}"
+                                                        <a href="{{ route('barang-masuk.edit', $item->id) }}"
                                                             class="btn btn-warning btn-sm mr-2">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
 
-                                                        <form action="{{ route('barang.destroy', $item->id) }}"
+                                                        <form action="{{ route('barang-masuk.destroy', $item->id) }}"
                                                             method="POST">
                                                             @csrf
                                                             @method('DELETE')

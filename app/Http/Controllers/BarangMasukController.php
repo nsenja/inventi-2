@@ -17,8 +17,6 @@ class BarangMasukController extends Controller
     {
         $barangMasuk = BarangMasuk::with('barang.kategori')->get();
         return view('admin.barangMasuk.index', compact('barangMasuk'));
-        // $barangMasuk = BarangMasuk::with('barang')->get();
-        // return view('admin.barangMasuk.index', compact('barangMasuk'));
     }
 
     /**
@@ -28,8 +26,12 @@ class BarangMasukController extends Controller
      */
     public function create()
     {
-        //
+        // Ambil semua barang untuk dropdown
+        // Pastikan model Barang sudah ada dan memiliki relasi kategori
+        $barangs = Barang::with('kategori')->get();
+        return view('admin.barangMasuk.create', compact('barangs'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -40,17 +42,29 @@ class BarangMasukController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'barang_id' => 'required|exists:barang,id',
-            'jumlah' => 'required|integer|min:1',
-            'tanggal_masuk' => 'required|date',
-            'catatan' => 'nullable|string',
-        ]);
+        'barang_id'     => 'required|exists:barangs,id',
+        'jumlah'        => 'required|integer|min:1',
+        'tanggal_masuk' => 'required|date',
+        'catatan'       => 'nullable|string',
+        'bukti'    => 'nullable|image|mimes:jpg,jpeg,png,pdf|max:2048',
 
-        BarangMasuk::create($validated);
+    ]);
 
-        // Update stok barang
-        $barang = Barang::find($validated['barang_id']);
-        $barang->increment('stok', $validated['jumlah']);
+    if ($request->hasFile('bukti')) {
+    $validated['bukti'] = $request->file('bukti')->store('bukti', 'public');
+}
+
+    // Simpan ke tabel barang_masuk
+    $barangMasuk = BarangMasuk::create($validated);
+
+    // Update stok barang
+    $barang = Barang::find($validated['barang_id']);
+    $barang->jumlah += $validated['jumlah'];
+    $barang->save();
+
+    return redirect()->route('barang-masuk.index')
+        ->with('success', 'Barang masuk berhasil disimpan!');
+
     }
     /**
      * Display the specified resource.
