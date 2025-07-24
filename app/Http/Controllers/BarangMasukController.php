@@ -46,7 +46,7 @@ class BarangMasukController extends Controller
         'jumlah'        => 'required|integer|min:1',
         'tanggal_masuk' => 'required|date',
         'catatan'       => 'nullable|string',
-        'bukti'    => 'nullable|image|mimes:jpg,jpeg,png,pdf|max:2048',
+        'bukti' => 'nullable|image|mimes:jpg,jpeg,png,pdf|max:2048',
 
     ]);
 

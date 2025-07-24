@@ -51,7 +51,7 @@
                                                     @if ($item->bukti)
                                                         <a href="{{ asset('storage/' . $item->bukti) }}" target="_blank">
                                                             <img src="{{ asset('storage/' . $item->bukti) }}"
-                                                                alt="Bukti Barang Masuk" style="width: 50px; height: 50px;">
+                                                                alt="Bukti Barang Masuk" style="width: 80px; height: 60px;">
                                                         </a>
                                                     @else
                                                         Tidak ada bukti
