@@ -18,6 +18,7 @@ class Barang extends Model
         'jumlah',
         'kondisi',
         'deskripsi',
+        'foto', // Tambahkan kolom foto ke dalam fillable
     ];
 
     public function kategori()

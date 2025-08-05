@@ -30,6 +30,7 @@
                                                 <th class="text-center">Kode Barang</th>
                                                 <th class="text-center">Jumlah</th>
                                                 <th class="text-center">Kondisi</th>
+                                                <th class="text-center">Foto</th>
                                                 <th class="text-center">Aksi</th>
                                             </tr>
                                         </thead>
@@ -42,6 +43,7 @@
                                                 <td class="text-center">{{ $item->kode_barang }}</td>
                                                 <td class="text-center">{{ $item->jumlah }}</td>
                                                 <td class="text-center">{{ $item->kondisi }}</td>
+                                                <td class="text-center">{{ $item->foto }}</td>
                                                 <td class="text-center" style="width: 150px;">
                                                     <div class="d-flex justify-content-center ">
                                                         <a href="{{ route('barang.edit', $item->id) }}"

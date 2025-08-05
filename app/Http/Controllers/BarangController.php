@@ -47,7 +47,8 @@ class BarangController extends Controller
         'kode_barang' => 'required|string|max:100|unique:barangs,kode_barang',
         'jumlah' => 'required|integer|min:0',
         'kondisi' => 'required|in:baik,rusak,diperbaiki',
-        'deskripsi' => 'nullable|string'
+        'deskripsi' => 'nullable|string',
+        'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Validasi untuk foto
     ]);
 
     Barang::create([
@@ -57,6 +58,7 @@ class BarangController extends Controller
             'jumlah'        => $request->jumlah,
             'kondisi'       => $request->kondisi,
             'deskripsi'     => $request->deskripsi,
+            'foto'         => $request->file('foto') ? $request->file('foto')->store('foto', 'public') : null,
         ]);
 
         return redirect()->route('barang.index')
@@ -104,7 +106,8 @@ class BarangController extends Controller
         'kode_barang'   => 'required|string|max:100|unique:barangs,kode_barang,' . $id,
         'jumlah'        => 'required|integer|min:0',
         'kondisi'       => 'required|in:baik,rusak,diperbaiki',
-        'deskripsi'     => 'nullable|string'
+        'deskripsi'     => 'nullable|string',
+        'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048', // max dalam KB (2MB)
     ]);
 
     $barang = Barang::findOrFail($id);
@@ -115,6 +118,7 @@ class BarangController extends Controller
         'jumlah'        => $request->jumlah,
         'kondisi'       => $request->kondisi,
         'deskripsi'     => $request->deskripsi,
+        'foto'          => $request->file('foto') ? $request->file('foto')->store('foto', 'public') : $barang->foto,
     ]);
 
     return redirect()->route('barang.index')->with('success', 'Data barang berhasil diperbarui.');

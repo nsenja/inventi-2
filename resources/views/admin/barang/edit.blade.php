@@ -17,7 +17,7 @@
                         </div>
 
                         <div class="card-body">
-                             <form action="{{ route('barang.update', $barang->id) }}" method="POST">
+                             <form action="{{ route('barang.update', $barang->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT') {{-- penting untuk update --}}
 
@@ -100,6 +100,19 @@
                                     @enderror
                                 </div>
 
+                                {{-- Foto Barang --}}
+                                <div class="mb-3">
+                                    <label for="foto" class="form-label">Foto Barang</label>
+                                    <input type="file" name="foto" id="foto"
+                                        class="form-control @error('foto') is-invalid @enderror">
+                                    @if ($barang->foto)
+                                        <img src="{{ asset('storage/' . $barang->foto) }}" alt="Foto    Barang"
+                                            class="img-thumbnail mt-2" style="max-width: 200px;">
+                                    @endif
+                                    @error('foto')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
                                 <div class="d-flex justify-content-start gap-2 mt-3">
                                     <button type="submit" class="btn btn-success btn-sm mr-2">
