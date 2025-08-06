@@ -5,6 +5,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\BarangMasukController;
 use App\Http\Controllers\BarangKeluarController;
+use App\Http\Controllers\DashboardController;
 
 
 
@@ -19,20 +20,22 @@ use App\Http\Controllers\BarangKeluarController;
 |
 */
 
-Route::get('/', function () {
-    return view('admin.index');
+// Route::get('/', function () {
+//     return view('admin.index');
 
-});
-
-
+// });
 
 
+
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::resource('kategori', KategoriController::class);
 Route::resource('barang', BarangController::class);
 Route::resource('barang-masuk', BarangMasukController::class);
 Route::resource('barang-keluar', BarangKeluarController::class);
 Route::get('/cetak', [BarangController::class, 'cetak'])->name('barang.cetak');
 Route::get('/barang-masuk/cetak', [BarangMasukController::class, 'cetak'])->name('barang-masuk.cetak');
+Route::get('/tes-pdf', [BarangMasukController::class, 'cetak']);
 Route::get('/barang-keluar/cetak', [BarangKeluarController::class, 'cetak'])->name('barang-keluar.cetak');
 
 

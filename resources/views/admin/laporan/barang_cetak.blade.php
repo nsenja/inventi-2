@@ -81,7 +81,7 @@
         <div class="kop">
             <div style="float: left;">
                 {{-- Logo Poltekkes Surabaya --}}
-                <img src="{{ public_path('logo/logo.png') }}" style="width: 170px; height: 70px;">
+                <img src="{{ public_path('logo/logo.png') }}" style="width: 190px; height: 70px;">
             </div>
 
             <div style="text-align: center;">
@@ -112,11 +112,10 @@
                 <tr>
                     <th class="text-center">No.</th>
                     <th class="text-center">Nama Barang</th>
-                    <th class="text-center">Kategori</th>
-                    <th class="text-center">Kode</th>
+                    <th class="text-center">Kode Barang</th>
                     <th class="text-center">Jumlah</th>
                     <th class="text-center">Kondisi</th>
-                    <th class="text-center">Foto</th>
+                    <!-- <th class="text-center">Foto</th> -->
                 </tr>
             </thead>
             <tbody>
@@ -124,30 +123,10 @@
                 <tr>
                     <td class="text-center">{{ $loop->iteration }}</td>
                     <td>{{ $item->nama_barang }}</td>
-                    <td>{{ $item->kategori->nama_kategori ?? '-' }}</td>
                     <td>{{ $item->kode_barang }}</td>
                     <td class="text-center">{{ $item->jumlah }}</td>
                     <td>{{ ucfirst($item->kondisi) }}</td>
-                    <td class="text-center">
-                        @php
-                        $thumbPath = 'thumbs/' . $item->foto;
-                        @endphp
-                        @if (!empty($item->foto) && file_exists(public_path('storage/' . $thumbPath)))
-                        @if ($isPdf)
-                        @php
-                        $path = public_path('storage/' . $thumbPath);
-                        $type = pathinfo($path, PATHINFO_EXTENSION);
-                        $data = file_get_contents($path);
-                        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
-                        @endphp
-                        <img src="{{ $base64 }}" class="img-thumbnail" />
-                        @else
-                        <img src="{{ asset('storage/' . $thumbPath) }}" class="img-thumbnail" />
-                        @endif
-                        @else
-                        -
-                        @endif
-                    </td>
+                    
                 </tr>
                 @endforeach
             </tbody>

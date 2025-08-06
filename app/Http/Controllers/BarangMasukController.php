@@ -7,6 +7,7 @@ use App\Models\BarangMasuk;
 use App\Models\Barang;
 use Barryvdh\DomPDF\Facade\Pdf;
 
+
 class BarangMasukController extends Controller
 {
     /**
@@ -112,16 +113,17 @@ class BarangMasukController extends Controller
         //
     }
 
-    // Pastikan sudah di-`use` di bagian atas controller
+   
+public function cetak()
+{
+    $barangMasuk = BarangMasuk::with('barang.kategori')
+                    ->orderBy('tanggal_masuk', 'desc')
+                    ->get();
 
+    $pdf = Pdf::loadView('admin.laporan.barang_masuk_cetak', compact('barangMasuk'))
+              ->setPaper('a4', 'portrait');
 
-    public function cetak()
-    {
-        $barangMasuk = BarangMasuk::with('barang.kategori')->orderBy('tanggal_masuk')->get();
+    return $pdf->stream('laporan-barang-masuk.pdf');
+}
 
-        $pdf = Pdf::loadView('admin.laporan.barang_masuk_cetak', compact('barangMasuk'))
-                  ->setPaper('a4', 'portrait');
-
-        return $pdf->stream('laporan-barang-masuk.pdf');
-    }
 }

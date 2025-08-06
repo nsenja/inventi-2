@@ -26,4 +26,6 @@ class Barang extends Model
         return $this->belongsTo(Kategori::class, 'category_id');
     }
 
+    
+
 }
