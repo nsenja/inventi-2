@@ -31,7 +31,7 @@ Route::resource('kategori', KategoriController::class);
 Route::resource('barang', BarangController::class);
 Route::resource('barang-masuk', BarangMasukController::class);
 Route::resource('barang-keluar', BarangKeluarController::class);
-Route::get('/barang/cetak', [BarangController::class, 'cetak'])->name('barang.print');
+Route::get('/cetak', [BarangController::class, 'cetak'])->name('barang.cetak');
 Route::get('/barang-masuk/cetak', [BarangMasukController::class, 'cetak'])->name('barang-masuk.cetak');
 Route::get('/barang-keluar/cetak', [BarangKeluarController::class, 'cetak'])->name('barang-keluar.cetak');
 

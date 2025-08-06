@@ -137,6 +137,7 @@ class BarangController extends Controller
         return redirect()->route('barang.index')->with('success', 'Barang berhasil dihapus');
     }
 
+
    public function cetak(Request $request)
 {
     $query = Barang::with('kategori');
@@ -148,9 +149,15 @@ class BarangController extends Controller
     $barang = $query->orderBy('nama_barang')->get();
 
     $pdf = PDF::loadView('admin.laporan.barang_cetak', compact('barang'))
-              ->setPaper('a4', 'portrait');
+          ->setPaper('a4', 'portrait')
+          ->setOption('isHtml5ParserEnabled', true);
 
-    return $pdf->download('laporan-barang.pdf'); // pakai download supaya muncul unduhan langsung
-}
+    // Jika ingin kirim param supaya blade tahu ini pdf
+    $pdf->getDomPDF()->setBasePath(public_path());
+
+    return $pdf->stream('laporan-barang.pdf');
+
+    }
+
 
 }

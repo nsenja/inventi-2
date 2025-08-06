@@ -17,7 +17,7 @@
                                 <a href="{{ route('barang.create') }}" class="btn btn-primary btn-sm me-2">
                                     <i class="fas fa-plus me-1"></i> Tambah
                                 </a>
-                                <a href="{{ route('barang.print') }}" class="btn btn-success btn-sm">
+                                <a href="{{ route('barang.cetak') }}" class="btn btn-success btn-sm">
                                     <i class="fas fa-print me-1"></i> Cetak
                                 </a>
                                 
