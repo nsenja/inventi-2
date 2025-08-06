@@ -137,19 +137,20 @@ class BarangController extends Controller
         return redirect()->route('barang.index')->with('success', 'Barang berhasil dihapus');
     }
 
-    public function cetak(Request $request)
-    {
+   public function cetak(Request $request)
+{
     $query = Barang::with('kategori');
 
-    if ($request->filled('kategori_id')) {
-        $query->where('kategori_id', $request->kategori_id);
+    if ($request->filled('category_id')) {
+        $query->where('category_id', $request->category_id);
     }
 
-    $barang = $query->orderBy('nama')->get();
+    $barang = $query->orderBy('nama_barang')->get();
 
-    $pdf = PDF::loadView('laporan.barang_pdf', compact('barang'));
+    $pdf = PDF::loadView('admin.laporan.barang_cetak', compact('barang'))
+              ->setPaper('a4', 'portrait');
 
-    return $pdf->download('laporan-barang.pdf');
+    return $pdf->download('laporan-barang.pdf'); // pakai download supaya muncul unduhan langsung
 }
 
 }

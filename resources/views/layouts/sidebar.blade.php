@@ -46,12 +46,12 @@
             </a>
         </li>
 
-        <li class="nav-item active">
+        <!-- <li class="nav-item active">
             <a class="nav-link" href="{{ url('/laporan') }}">
                 <i class="fas fa-fw fa-file-alt"></i>
                 <span>Laporan</span>
             </a>
-        </li>
+        </li> -->
 
         <li class="nav-item active">
             <a class="nav-link" href="{{ url('/pengaturan') }}">

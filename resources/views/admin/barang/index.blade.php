@@ -13,10 +13,17 @@
                     <div class="card-header py-3">
                         <div class="d-flex justify-content-between align-items-center">
                             <h6 class="m-0 font-weight-bold text-primary">Barang</h6>
-                            <a href="{{ route('barang.create') }}" class="btn btn-primary btn-sm">
-                                <i class="fas fa-plus me-1"></i> Tambah
-                            </a>
+                            <div>
+                                <a href="{{ route('barang.create') }}" class="btn btn-primary btn-sm me-2">
+                                    <i class="fas fa-plus me-1"></i> Tambah
+                                </a>
+                                <a href="{{ route('barang.print') }}" class="btn btn-success btn-sm">
+                                    <i class="fas fa-print me-1"></i> Cetak
+                                </a>
+                                
+                            </div>
                         </div>
+
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">

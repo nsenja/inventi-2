@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\BarangMasuk;
 use App\Models\Barang;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class BarangMasukController extends Controller
 {
@@ -109,5 +110,18 @@ class BarangMasukController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    // Pastikan sudah di-`use` di bagian atas controller
+
+
+    public function cetak()
+    {
+        $barangMasuk = BarangMasuk::with('barang.kategori')->orderBy('tanggal_masuk')->get();
+
+        $pdf = Pdf::loadView('admin.laporan.barang_masuk_cetak', compact('barangMasuk'))
+                  ->setPaper('a4', 'portrait');
+
+        return $pdf->stream('laporan-barang-masuk.pdf');
     }
 }
