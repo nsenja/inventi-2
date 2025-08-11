@@ -16,14 +16,14 @@
             </a>
         </li>
 
-        <li class="nav-item active">
+        <li class="nav-item {{ request()->is('kategori') ? 'active' : '' }}">
             <a class="nav-link" href="{{ url('/kategori') }}">
                 <i class="fas fa-fw fa-tags"></i>
                 <span>Kategori Barang</span>
             </a>
         </li>
 
-        <li class="nav-item active">
+        <li class="nav-item {{ request()->is('barang') ? 'active' : '' }}">
             <a class="nav-link" href="{{ url('/barang') }}">
                 <i class="fas fa-fw fa-box"></i>
                 <span>Barang</span>
@@ -31,7 +31,7 @@
         </li>
 
         {{-- Barang Masuk --}}
-        <li class="nav-item active">
+        <li class="nav-item {{ request()->is('barang-masuk') ? 'active' : '' }}">
             <a class="nav-link" href="{{ url('/barang-masuk') }}">
                 <i class="fas fa-inbox"></i>
                 <span>Barang Masuk</span>
@@ -39,7 +39,7 @@
         </li>
 
         {{-- Barang Keluar --}}
-        <li class="nav-item active">
+        <li class="nav-item {{ request()->is('barang-keluar') ? 'active' : '' }}">
             <a class="nav-link" href="{{ url('/barang-keluar') }}">
                 <i class="fas fa-box-open"></i>
                 <span>Barang Keluar</span>
@@ -53,7 +53,7 @@
             </a>
         </li> -->
 
-        <li class="nav-item active">
+        <li class="nav-item {{ request()->is('pengaturan') ? 'active' : '' }}">
             <a class="nav-link" href="{{ url('/pengaturan') }}">
                 <i class="fas fa-fw fa-cog"></i>
                 <span>Pengaturan</span>

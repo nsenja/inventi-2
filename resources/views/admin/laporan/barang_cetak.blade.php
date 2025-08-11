@@ -115,7 +115,8 @@
                     <th class="text-center">Kode Barang</th>
                     <th class="text-center">Jumlah</th>
                     <th class="text-center">Kondisi</th>
-                    <!-- <th class="text-center">Foto</th> -->
+                    <th class="text-center">Deskripsi</th>
+                    <th class="text-center">Foto</th>
                 </tr>
             </thead>
             <tbody>
@@ -126,7 +127,16 @@
                     <td>{{ $item->kode_barang }}</td>
                     <td class="text-center">{{ $item->jumlah }}</td>
                     <td>{{ ucfirst($item->kondisi) }}</td>
-                    
+                     <td>{{ $item->deskripsi }}</td>
+                    <td class="text-center" style="border: 1px solid #000; padding: 4px;">
+                        @if ($item->foto  && file_exists(public_path('storage/' . $item->bukti)))
+                        <img src="{{ public_path('storage/' . $item->foto) }}"
+                            alt="Foto Barang"
+                            style="max-width: 80px; height: auto; display: block; margin: 0 auto;">
+                        @else
+                        Tidak ada foto
+                        @endif
+                    </td>
                 </tr>
                 @endforeach
             </tbody>

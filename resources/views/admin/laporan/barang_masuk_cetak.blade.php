@@ -52,11 +52,12 @@
 
         th,
         td {
-            border: 1px solid #000;
+            border: solid 1px #000;
             padding: 6px 10px;
             text-align: left;
             vertical-align: top;
         }
+
 
         th {
             background-color: #f2f2f2;
@@ -65,11 +66,6 @@
 
         .text-center {
             text-align: center;
-        }
-
-        .img-thumbnail {
-            width: 60px;
-            height: auto;
         }
     </style>
 
@@ -115,7 +111,7 @@
                 <th class="text-center">Kode Barang</th>
                 <th class="text-center">Jumlah</th>
                 <th class="text-center">Catatan</th>
-                <!-- <th class="text-center">Foto</th> -->
+                <th class="text-center">Bukti</th>
             </tr>
         </thead>
         <tbody>
@@ -129,8 +125,17 @@
                 <td>{{ $item->barang->nama_barang }}</td>
                 <td>{{ $item->barang->kode_barang }}</td>
                 <td>{{ $item->jumlah }}</td>
-                <td>{{ $item->catatan }}</td
-                    <thead>{{ $item->catatan }}</td>
+                <td>{{ $item->catatan }}</td>
+                <td class="text-center" style="border: 1px solid #000; padding: 4px;">
+                    @if ($item->bukti && file_exists(public_path('storage/' . $item->bukti)))
+                    {{-- Menampilkan gambar dengan batasan ukuran dan memastikan tampilannya konsisten --}}
+                    <img src="{{ public_path('storage/' . $item->bukti) }}"
+                        alt="Bukti Barang Masuk"
+                        style="max-width: 80px; height: auto; display: block; margin: 0 auto;">
+                    @else
+                    Tidak ada bukti
+                    @endif
+                </td>
             </tr>
             @endforeach
         </tbody>
