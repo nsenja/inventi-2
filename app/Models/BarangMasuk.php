@@ -9,14 +9,22 @@ class BarangMasuk extends Model
 {
     use HasFactory;
     protected $table = 'barang_masuk';
-    protected $fillable = ['barang_id', 'jumlah', 'tanggal_masuk', 'catatan','bukti',
-];
+    protected $fillable = [
+        'barang_id',
+        'jumlah',
+        'tanggal_masuk',
+        'catatan',
+        'bukti',
+    ];
 
-    public function barang() {
+    public function barang()
+    {
         return $this->belongsTo(Barang::class);
     }
-    public function kategori() {
-        return $this->barang->kategori();
+
+    public function kategori()
+    {
+        return $this->belongsToThrough(Kategori::class, Barang::class);
     }
     
     

@@ -9,9 +9,9 @@
 
         <hr class="sidebar-divider my-0">
 
-        <li class="nav-item active">
-            <a class="nav-link" href="{{ url('/') }}">
-                <i class="fas fa-fw fa-archive"></i>
+        <li class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('dashboard') }}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span>
             </a>
         </li>
@@ -41,7 +41,7 @@
         {{-- Barang Keluar --}}
         <li class="nav-item active">
             <a class="nav-link" href="{{ url('/barang-keluar') }}">
-                <i class="fas fa-box-open"></i> 
+                <i class="fas fa-box-open"></i>
                 <span>Barang Keluar</span>
             </a>
         </li>

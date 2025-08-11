@@ -28,13 +28,13 @@ use App\Http\Controllers\DashboardController;
 
 
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::resource('kategori', KategoriController::class);
 Route::resource('barang', BarangController::class);
 Route::resource('barang-masuk', BarangMasukController::class);
 Route::resource('barang-keluar', BarangKeluarController::class);
 Route::get('/cetak', [BarangController::class, 'cetak'])->name('barang.cetak');
-Route::get('/barang-masuk/cetak', [BarangMasukController::class, 'cetak'])->name('barang-masuk.cetak');
+Route::get('/cetak-barang-masuk', [BarangMasukController::class, 'cetak'])->name('barang-masuk.cetak');
 Route::get('/tes-pdf', [BarangMasukController::class, 'cetak']);
 Route::get('/barang-keluar/cetak', [BarangKeluarController::class, 'cetak'])->name('barang-keluar.cetak');
 

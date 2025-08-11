@@ -155,7 +155,7 @@ class BarangController extends Controller
     // Jika ingin kirim param supaya blade tahu ini pdf
     $pdf->getDomPDF()->setBasePath(public_path());
 
-    return $pdf->stream('laporan-barang-masuk.pdf');
+    return $pdf->stream('laporan-barang.pdf');
 
     }
 
