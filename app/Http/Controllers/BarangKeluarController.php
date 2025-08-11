@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BarangKeluar;
 use App\Models\Barang;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class BarangKeluarController extends Controller
 {
@@ -110,5 +111,23 @@ class BarangKeluarController extends Controller
 
         return redirect()->route('barang-keluar.index')->with('success', 'Barang keluar berhasil dihapus.');
     }       
+
+    public function cetak()
+    {
+        $barangKeluar = BarangKeluar::with('barang.kategori')
+            ->orderBy('tanggal_keluar', 'asc')
+            ->get();
+
+        // Debug: uncomment jika ingin memastikan data sudah benar
+        // dd($barangMasuk->toArray());
+
+        // Muat view Blade ke dalam PDF, atur orientasi landscape
+        $pdf = PDF::loadView('admin.laporan.barang_keluar_cetak', compact('barangKeluar'))
+            ->setPaper('a4', 'potrait')
+            ->setOption('isHtml5ParserEnabled', true);
+        
+        // Tampilkan PDF di browser tanpa mengunduh
+        return $pdf->stream('laporan-barang-keluar.pdf');
+    }
 }
 

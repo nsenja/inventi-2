@@ -36,7 +36,7 @@ Route::resource('barang-keluar', BarangKeluarController::class);
 Route::get('/cetak', [BarangController::class, 'cetak'])->name('barang.cetak');
 Route::get('/cetak-barang-masuk', [BarangMasukController::class, 'cetak'])->name('barang-masuk.cetak');
 Route::get('/tes-pdf', [BarangMasukController::class, 'cetak']);
-Route::get('/barang-keluar/cetak', [BarangKeluarController::class, 'cetak'])->name('barang-keluar.cetak');
+Route::get('/cetak-barang-keluar', [BarangKeluarController::class, 'cetak'])->name('barang-keluar.cetak');
 
 
 

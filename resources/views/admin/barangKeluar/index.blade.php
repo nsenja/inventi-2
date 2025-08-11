@@ -42,7 +42,9 @@
                                         @foreach ($barangKeluar as $index => $item)
                                         <tr>
                                             <td class="text-center">{{ $index + 1 }}</td>
-                                            <td class="text-center">{{ $item->tanggal_keluar }}</td>
+                                            <td class="text-center">
+                                                {{ \Carbon\Carbon::parse($item->tanggal_keluar)->isoFormat('D-MM-YYYY') }}
+                                            </td>
                                             <td class="text-center">{{ $item->barang->kategori->nama_kategori }}</td>
                                             <td class="text-center">{{ $item->barang->nama_barang }}</td>
                                             <td class="text-center">{{ $item->barang->kode_barang }}</td>

@@ -10,7 +10,7 @@
         <hr class="sidebar-divider my-0">
 
         <li class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('dashboard') }}">
+            <a class="nav-link" href="{{ url('/') }}">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span>
             </a>
