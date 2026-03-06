@@ -2,150 +2,102 @@
 
 @section('content')
 <div class="container-fluid">
-    <!-- Konten dashboard di sini -->
-    <div id="content-wrapper" class="d-flex flex-column">
-        <!-- Main Content -->
-        <div id="content">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <h6 class="m-0 font-weight-bold text-primary">Barang</h6>
 
-            <!-- Begin Page Content -->
-            <div class="container-fluid">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="m-0 font-weight-bold text-primary">Barang</h6>
-                            <div>
-                                <a href="{{ route('barang.create') }}" class="btn btn-primary btn-sm me-2">
-                                    <i class="fas fa-plus me-1"></i> Tambah
-                                </a>
-                                <a href="{{ route('barang.cetak') }}" class="btn btn-success btn-sm">
-                                    <i class="fas fa-print me-1"></i> Cetak
-                                </a>
-                                <form action="{{ route('barang.cetak') }}" method="GET" target="_blank">
-    <div class="row">
-        <div class="col-md-4 mb-2">
-            <select name="category_id" class="form-control">
-                <option value="">Semua Kategori</option>
-                @foreach ($kategoris as $kategori)
-                    <option value="{{ $kategori->id }}">
-                        {{ $kategori->nama_kategori }}
-                    </option>
-                @endforeach
-            </select>
+                <a href="{{ route('barang.create') }}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus mr-1"></i> Tambah
+                </a>
+            </div>
         </div>
 
-        <div class="col-md-3 mb-2">
-            <select name="bulan" class="form-control">
-                <option value="">Semua Bulan</option>
-                <option value="1">Januari</option>
-                <option value="2">Februari</option>
-                <option value="3">Maret</option>
-                <option value="4">April</option>
-                <option value="5">Mei</option>
-                <option value="6">Juni</option>
-                <option value="7">Juli</option>
-                <option value="8">Agustus</option>
-                <option value="9">September</option>
-                <option value="10">Oktober</option>
-                <option value="11">November</option>
-                <option value="12">Desember</option>
-            </select>
-        </div>
-
-        <div class="col-md-3 mb-2">
-            <select name="tahun" class="form-control">
-                <option value="">Semua Tahun</option>
-                @for ($tahun = date('Y'); $tahun >= 2020; $tahun--)
-                    <option value="{{ $tahun }}">{{ $tahun }}</option>
-                @endfor
-            </select>
-        </div>
-
-        <div class="col-md-2 mb-2">
-            <button type="submit" class="btn btn-danger btn-block">
-                Cetak PDF
-            </button>
-        </div>
-    </div>
-</form>
-                                
-                            </div>
-                        </div>
-
+        <div class="card-body">
+            <form action="{{ route('barang.cetak') }}" method="GET" target="_blank" class="mb-4">
+                <div class="row align-items-end">
+                    <div class="col-md-4 mb-2">
+                        <label for="category_id">Kategori</label>
+                        <select name="category_id" id="category_id" class="form-control">
+                            <option value="">Semua Kategori</option>
+                            @foreach ($kategoris as $kategori)
+                                <option value="{{ $kategori->id }}">
+                                    {{ $kategori->nama_kategori }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="kategoriTable" class="table table-bordered">
-                                <table id="kategoriTable" class="table table-striped table-bordered table-hover">
-                                    <thead class="table-white">
-                                        <tr>
-                                            <th class="text-center" style="width: 50px;">No</th>
-                                            <th class="text-center">Nama Kategori</th>
-                                            <th class="text-center">Nama Barang</th>
-                                            <th class="text-center">Kode Barang</th>
-                                            <th class="text-center">Jumlah</th>
-                                            <th class="text-center">Kondisi</th>
-                                            <th class="text-center">Foto</th>
-                                            <th class="text-center">Aksi</th>
-                                        </tr>
-                                    </thead>
 
-                                    @foreach ($barang as $index => $item)
-                                    <tr>
-                                        <td class="text-center" style="width: 50px;">{{ $index + 1 }}</td>
-                                        <td class="text-center">{{ $item->kategori->nama_kategori }}</td>
-                                        <td class="text-center">{{ $item->nama_barang }}</td>
-                                        <td class="text-center">{{ $item->kode_barang }}</td>
-                                        <td class="text-center">{{ $item->jumlah }}</td>
-                                        <td class="text-center">{{ $item->kondisi }}</td>
-                                        <td class="text-center">
-                                            <img src="{{ asset('storage/' . $item->foto) }}" alt="foto"
-                                                class="img-thumbnail" style="max-width: 100px;">
-                                        </td>
-                                        <td class="text-center" style="width: 150px;">
-                                            <div class="d-flex justify-content-center ">
-                                                <a href="{{ route('barang.edit', $item->id) }}"
-                                                    class="btn btn-warning btn-sm mr-2">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
+                    <div class="col-md-3 mb-2">
+                        <label for="bulan">Bulan</label>
+                        <select name="bulan" id="bulan" class="form-control">
+                            <option value="">Semua Bulan</option>
+                            <option value="1">Januari</option>
+                            <option value="2">Februari</option>
+                            <option value="3">Maret</option>
+                            <option value="4">April</option>
+                            <option value="5">Mei</option>
+                            <option value="6">Juni</option>
+                            <option value="7">Juli</option>
+                            <option value="8">Agustus</option>
+                            <option value="9">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Desember</option>
+                        </select>
+                    </div>
 
-                                                <form action="{{ route('barang.destroy', $item->id) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm"
-                                                        onclick="return confirm('Yakin ingin menghapus barang ini?')">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </table>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="col-md-3 mb-2">
+                        <label for="tahun">Tahun</label>
+                        <select name="tahun" id="tahun" class="form-control">
+                            <option value="">Semua Tahun</option>
+                            @for ($tahun = date('Y'); $tahun >= 2020; $tahun--)
+                                <option value="{{ $tahun }}">{{ $tahun }}</option>
+                            @endfor
+                        </select>
+                    </div>
+
+                    <div class="col-md-2 mb-2">
+                        <button type="submit" class="btn btn-success btn-block">
+                            <i class="fas fa-print mr-1"></i> Cetak
+                        </button>
                     </div>
                 </div>
+            </form>
 
-                <!-- End of Main Content -->
-                @endsection
-
-                @section('scripts')
-                <!-- Bootstrap core JavaScript-->
-                <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
-                <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-
-                <!-- Core plugin JavaScript-->
-                <script src="{{ asset('assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
-
-                <!-- Custom scripts for all pages-->
-                <script src="{{ asset('assets/js/sb-admin-2.min.js') }}"></script>
-
-                <!-- Page level plugins -->
-                <script src="{{ asset('assets/vendor/chart.js/Chart.min.js') }}"></script>
-
-                <!-- Page level custom scripts -->
-                <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>
-                <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
-                @endsection
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">No</th>
+                            <th class="text-center">Nama Barang</th>
+                            <th class="text-center">Kategori</th>
+                            <th class="text-center">Stok</th>
+                            <th class="text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($barang as $index => $item)
+                            <tr>
+                                <td class="text-center">{{ $index + 1 }}</td>
+                                <td>{{ $item->nama_barang }}</td>
+                                <td>{{ $item->kategori->nama_kategori ?? '-' }}</td>
+                                <td class="text-center">{{ $item->stok }}</td>
+                                <td class="text-center">
+                                    <a href="{{ route('barang.edit', $item->id) }}" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center">Data barang belum ada.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

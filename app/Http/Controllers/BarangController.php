@@ -14,13 +14,15 @@ class BarangController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         $barang = Barang::with('kategori')->get();
-        return view('admin.barang.index', compact('barang'));
-        
+        $kategoris = Kategori::all();
+
+        return view('admin.barang.index', compact('barang', 'kategoris'));
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -41,17 +43,17 @@ class BarangController extends Controller
      */
     public function store(Request $request)
     {
-         $request->validate([
-        'category_id' => 'required|exists:categories,id',
-        'nama_barang' => 'required|string|max:255',
-        'kode_barang' => 'required|string|max:100|unique:barangs,kode_barang',
-        'jumlah' => 'required|integer|min:0',
-        'kondisi' => 'required|in:baik,rusak,diperbaiki',
-        'deskripsi' => 'nullable|string',
-        'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Validasi untuk foto
-    ]);
+        $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'nama_barang' => 'required|string|max:255',
+            'kode_barang' => 'required|string|max:100|unique:barangs,kode_barang',
+            'jumlah' => 'required|integer|min:0',
+            'kondisi' => 'required|in:baik,rusak,diperbaiki',
+            'deskripsi' => 'nullable|string',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Validasi untuk foto
+        ]);
 
-    Barang::create([
+        Barang::create([
             'category_id'   => $request->category_id,
             'nama_barang'   => $request->nama_barang,
             'kode_barang'   => $request->kode_barang,
@@ -84,11 +86,11 @@ class BarangController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {       
-    $categories = Kategori::all();
-    $barang = Barang::with('kategori')->findOrFail($id);
+    {
+        $categories = Kategori::all();
+        $barang = Barang::with('kategori')->findOrFail($id);
 
-    return view('admin.barang.edit', compact('barang', 'categories'));
+        return view('admin.barang.edit', compact('barang', 'categories'));
     }
 
     /**
@@ -100,30 +102,30 @@ class BarangController extends Controller
      */
     public function update(Request $request, $id)
     {
-    $request->validate([
-        'category_id'   => 'required|exists:categories,id',
-        'nama_barang'   => 'required|string|max:255',
-        'kode_barang'   => 'required|string|max:100|unique:barangs,kode_barang,' . $id,
-        'jumlah'        => 'required|integer|min:0',
-        'kondisi'       => 'required|in:baik,rusak,diperbaiki',
-        'deskripsi'     => 'nullable|string',
-        'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048', // max dalam KB (2MB)
-    ]);
+        $request->validate([
+            'category_id'   => 'required|exists:categories,id',
+            'nama_barang'   => 'required|string|max:255',
+            'kode_barang'   => 'required|string|max:100|unique:barangs,kode_barang,' . $id,
+            'jumlah'        => 'required|integer|min:0',
+            'kondisi'       => 'required|in:baik,rusak,diperbaiki',
+            'deskripsi'     => 'nullable|string',
+            'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048', // max dalam KB (2MB)
+        ]);
 
-    $barang = Barang::findOrFail($id);
-    $barang->update([
-        'category_id'   => $request->category_id,
-        'nama_barang'   => $request->nama_barang,
-        'kode_barang'   => $request->kode_barang,
-        'jumlah'        => $request->jumlah,
-        'kondisi'       => $request->kondisi,
-        'deskripsi'     => $request->deskripsi,
-        'foto'          => $request->file('foto') ? $request->file('foto')->store('foto', 'public') : $barang->foto,
-    ]);
+        $barang = Barang::findOrFail($id);
+        $barang->update([
+            'category_id'   => $request->category_id,
+            'nama_barang'   => $request->nama_barang,
+            'kode_barang'   => $request->kode_barang,
+            'jumlah'        => $request->jumlah,
+            'kondisi'       => $request->kondisi,
+            'deskripsi'     => $request->deskripsi,
+            'foto'          => $request->file('foto') ? $request->file('foto')->store('foto', 'public') : $barang->foto,
+        ]);
 
-    return redirect()->route('barang.index')->with('success', 'Data barang berhasil diperbarui.');
+        return redirect()->route('barang.index')->with('success', 'Data barang berhasil diperbarui.');
     }
- 
+
 
     /**
      * Remove the specified resource from storage.
@@ -138,32 +140,30 @@ class BarangController extends Controller
     }
 
 
-   public function cetak(Request $request)
-{
-    $query = Barang::with('kategori');
+    public function cetak(Request $request)
+    {
+        $query = Barang::with('kategori');
 
-    if ($request->filled('category_id')) {
-        $query->where('category_id', $request->category_id);
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->filled('bulan')) {
+            $query->whereMonth('created_at', $request->bulan);
+        }
+
+        if ($request->filled('tahun')) {
+            $query->whereYear('created_at', $request->tahun);
+        }
+
+        $barang = $query->orderBy('nama_barang')->get();
+
+        $pdf = PDF::loadView('admin.laporan.barang_cetak', compact('barang'))
+            ->setPaper('a4', 'portrait')
+            ->setOption('isHtml5ParserEnabled', true);
+
+        $pdf->getDomPDF()->setBasePath(public_path());
+
+        return $pdf->stream('laporan-barang.pdf');
     }
-
-    if ($request->filled('bulan')) {
-        $query->whereMonth('created_at', $request->bulan);
-    }
-
-    if ($request->filled('tahun')) {
-        $query->whereYear('created_at', $request->tahun);
-    }
-
-    $barang = $query->orderBy('nama_barang')->get();
-
-    $pdf = PDF::loadView('admin.laporan.barang_cetak', compact('barang'))
-        ->setPaper('a4', 'portrait')
-        ->setOption('isHtml5ParserEnabled', true);
-
-    $pdf->getDomPDF()->setBasePath(public_path());
-
-    return $pdf->stream('laporan-barang.pdf');
-}
-
-
 }
