@@ -151,32 +151,81 @@ class BarangMasukController extends Controller
     //     return $pdf->stream('laporan-barang-masuk.pdf');
     // }
 
+    // public function cetak(Request $request)
+    // {
+    //     $query = BarangMasuk::with('barang.kategori');
+
+    //     if ($request->filled('category_id')) {
+    //         $query->whereHas('barang', function ($q) use ($request) {
+    //             $q->where('category_id', $request->category_id);
+    //         });
+    //     }
+
+    //     if ($request->filled('bulan')) {
+    //         $query->whereMonth('tanggal_masuk', $request->bulan);
+    //     }
+
+    //     if ($request->filled('tahun')) {
+    //         $query->whereYear('tanggal_masuk', $request->tahun);
+    //     }
+
+    //     $barangMasuk = $query->orderBy('tanggal_masuk', 'asc')->get();
+        
+
+    //     $pdf = PDF::loadView('admin.laporan.barang_masuk_cetak', compact('barangMasuk'))
+    //         ->setPaper('a4', 'portrait')
+    //         ->setOption('isHtml5ParserEnabled', true);
+
+    //     $pdf->getDomPDF()->setBasePath(public_path());
+
+    //     return $pdf->stream('laporan-barang-masuk.pdf');
+    // }
+
     public function cetak(Request $request)
-    {
-        $query = BarangMasuk::with('barang.kategori');
+{
+    $query = BarangMasuk::with('barang.kategori');
 
-        if ($request->filled('category_id')) {
-            $query->whereHas('barang', function ($q) use ($request) {
-                $q->where('category_id', $request->category_id);
-            });
-        }
-
-        if ($request->filled('bulan')) {
-            $query->whereMonth('tanggal_masuk', $request->bulan);
-        }
-
-        if ($request->filled('tahun')) {
-            $query->whereYear('tanggal_masuk', $request->tahun);
-        }
-
-        $barangMasuk = $query->orderBy('tanggal_keluar', 'asc')->get();
-
-        $pdf = PDF::loadView('admin.laporan.barang_masuk_cetak', compact('barangMasuk'))
-            ->setPaper('a4', 'portrait')
-            ->setOption('isHtml5ParserEnabled', true);
-
-        $pdf->getDomPDF()->setBasePath(public_path());
-
-        return $pdf->stream('laporan-barang-masuk.pdf');
+    if ($request->filled('category_id')) {
+        $query->whereHas('barang', function ($q) use ($request) {
+            $q->where('category_id', $request->category_id);
+        });
     }
+
+    if ($request->filled('bulan')) {
+        $query->whereMonth('tanggal_masuk', $request->bulan);
+    }
+
+    if ($request->filled('tahun')) {
+        $query->whereYear('tanggal_masuk', $request->tahun);
+    }
+
+    $barangMasuk = $query->orderBy('tanggal_masuk', 'asc')->get();
+
+    $namaBulan = [
+        1 => 'Januari',
+        2 => 'Februari',
+        3 => 'Maret',
+        4 => 'April',
+        5 => 'Mei',
+        6 => 'Juni',
+        7 => 'Juli',
+        8 => 'Agustus',
+        9 => 'September',
+        10 => 'Oktober',
+        11 => 'November',
+        12 => 'Desember',
+    ];
+
+    $bulanDipilih = $request->filled('bulan') ? $namaBulan[(int) $request->bulan] : null;
+    $tahunDipilih = $request->tahun;
+
+    $pdf = PDF::loadView('admin.laporan.barang_masuk_cetak', compact(
+        'barangMasuk',
+        'bulanDipilih',
+        'tahunDipilih'
+    ))->setPaper('a4', 'portrait')
+      ->setOption('isHtml5ParserEnabled', true);
+
+    return $pdf->stream('laporan-barang-masuk.pdf');
+}
 }

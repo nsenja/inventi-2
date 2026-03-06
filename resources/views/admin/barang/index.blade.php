@@ -86,7 +86,7 @@
                             <th class="text-center">No</th>
                             <th class="text-center">Nama Barang</th>
                             <th class="text-center">Kategori</th>
-                            <th class="text-center">Stok</th>
+                            <th class="text-center">Jumlah</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -96,7 +96,7 @@
                                 <td class="text-center">{{ $index + 1 }}</td>
                                 <td>{{ $item->nama_barang }}</td>
                                 <td>{{ $item->kategori->nama_kategori ?? '-' }}</td>
-                                <td class="text-center">{{ $item->stok }}</td>
+                                <td class="text-center">{{ $item->jumlah }}</td>
                                 <td class="text-center">
                                     <a href="{{ route('barang.edit', $item->id) }}" class="btn btn-warning btn-sm">
                                         <i class="fas fa-edit"></i>

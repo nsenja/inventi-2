@@ -98,7 +98,16 @@
 
     <div style="text-align: center; margin-top: 10px; line-height: 1.2;">
         <h2 style="font-size: 16px; margin: 0;">LAPORAN DATA BARANG MASUK</h2>
-        <h3 style="font-size: 14px; margin: 0;">Inventori Unit Teknologi Informasi</h3>
+        <h3 style="font-size: 14px; margin: 0;">Inventori Teknologi Informasi</h3>
+
+        @if($bulanDipilih || $tahunDipilih)
+        <p style="font-size: 12px; margin: 4px 0 0 0;">
+            Periode:
+            {{ $bulanDipilih ?? 'Semua Bulan' }}
+            {{ $tahunDipilih ?? 'Semua Tahun' }}
+        </p>
+    @endif
+</div>
     </div>
 
     <table>
