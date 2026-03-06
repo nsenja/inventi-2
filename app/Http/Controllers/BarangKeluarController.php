@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BarangKeluar;
+use App\Models\Kategori;
 use App\Models\Barang;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -10,11 +11,30 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class BarangKeluarController extends Controller
 {
     
-    public function index()
-    {
-        $barangKeluar = BarangKeluar::with('barang')->latest()->get();
-        return view('admin.barangKeluar.index', compact('barangKeluar'));
+    // public function index()
+    // {
+    //     $barangKeluar = BarangKeluar::with('barang')->latest()->get();
+    //      $kategoris = Kategori::all();
+    //      return view('admin.barangKeluar.index', compact('barangKeluar','kategoris'));
+    
+    //     }
+
+     public function index(Request $request)
+{
+    $query = BarangKeluar::with('barang.kategori');
+
+    if ($request->filled('search')) {
+        $query->whereHas('barang', function ($q) use ($request) {
+            $q->where('nama_barang', 'like', '%' . $request->search . '%')
+              ->orWhere('kode_barang', 'like', '%' . $request->search . '%');
+        });
     }
+
+    $barangKeluar = $query->orderBy('tanggal_keluar', 'desc')->get();
+    $kategoris = Kategori::all();
+
+    return view('admin.barangKeluar.index', compact('barangKeluar', 'kategoris'));
+}
 
     public function create()
     {
@@ -112,49 +132,51 @@ class BarangKeluarController extends Controller
         return redirect()->route('barang-keluar.index')->with('success', 'Barang keluar berhasil dihapus.');
     }       
 
-    public function cetak()
-    {
-        $barangKeluar = BarangKeluar::with('barang.kategori')
-            ->orderBy('tanggal_keluar', 'asc')
-            ->get();
+    // public function cetak()
+    // {
+    //     $barangKeluar = BarangKeluar::with('barang.kategori')
+    //         ->orderBy('tanggal_keluar', 'asc')
+    //         ->get();
 
-        // Debug: uncomment jika ingin memastikan data sudah benar
-        // dd($barangMasuk->toArray());
+    //     // Debug: uncomment jika ingin memastikan data sudah benar
+    //     // dd($barangMasuk->toArray());
 
-        // Muat view Blade ke dalam PDF, atur orientasi landscape
-        $pdf = PDF::loadView('admin.laporan.barang_keluar_cetak', compact('barangKeluar'))
-            ->setPaper('a4', 'potrait')
-            ->setOption('isHtml5ParserEnabled', true);
+    //     // Muat view Blade ke dalam PDF, atur orientasi landscape
+    //     $pdf = PDF::loadView('admin.laporan.barang_keluar_cetak', compact('barangKeluar'))
+    //         ->setPaper('a4', 'potrait')
+    //         ->setOption('isHtml5ParserEnabled', true);
         
-        // Tampilkan PDF di browser tanpa mengunduh
-        return $pdf->stream('laporan-barang-keluar.pdf');
+    //     // Tampilkan PDF di browser tanpa mengunduh
+    //     return $pdf->stream('laporan-barang-keluar.pdf');
+    // }
+
+  public function cetak(Request $request)
+{
+    $query = BarangKeluar::with('barang.kategori');
+
+    if ($request->filled('category_id')) {
+        $query->whereHas('barang', function ($q) use ($request) {
+            $q->where('category_id', $request->category_id);
+        });
     }
 
-    public function cetak(Request $request)
-    {
-        $query = BarangKeluar::with('barang.kategori');
-
-        if ($request->filled('category_id')) {
-            $query->where('category_id', $request->category_id);
-        }
-
-        if ($request->filled('bulan')) {
-            $query->whereMonth('created_at', $request->bulan);
-        }
-
-        if ($request->filled('tahun')) {
-            $query->whereYear('created_at', $request->tahun);
-        }
-
-        $barang = $query->orderBy('nama_barang')->get();
-
-        $pdf = PDF::loadView('admin.laporan.barang_cetak', compact('barang'))
-            ->setPaper('a4', 'portrait')
-            ->setOption('isHtml5ParserEnabled', true);
-
-        $pdf->getDomPDF()->setBasePath(public_path());
-
-        return $pdf->stream('laporan-barang.pdf');
+    if ($request->filled('bulan')) {
+        $query->whereMonth('tanggal_keluar', $request->bulan);
     }
+
+    if ($request->filled('tahun')) {
+        $query->whereYear('tanggal_keluar', $request->tahun);
+    }
+
+    $barangKeluar = $query->orderBy('tanggal_keluar', 'asc')->get();
+
+    $pdf = PDF::loadView('admin.laporan.barang_keluar_cetak', compact('barangKeluar'))
+        ->setPaper('a4', 'portrait')
+        ->setOption('isHtml5ParserEnabled', true);
+
+    $pdf->getDomPDF()->setBasePath(public_path());
+
+    return $pdf->stream('laporan-barang-keluar.pdf');
+}
 }
 

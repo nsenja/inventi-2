@@ -7,9 +7,23 @@
             <div class="d-flex justify-content-between align-items-center flex-wrap">
                 <h6 class="m-0 font-weight-bold text-primary">Barang</h6>
 
-                <a href="{{ route('barang.create') }}" class="btn btn-primary btn-sm">
-                    <i class="fas fa-plus mr-1"></i> Tambah
-                </a>
+                <div class="d-flex align-items-center">
+                    <form action="{{ route('barang.index') }}" method="GET" class="form-inline mr-2">
+                        <div class="input-group">
+                            <input type="text" name="search" class="form-control form-control-sm"
+                                placeholder="Search" value="{{ request('search') }}">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <a href="{{ route('barang.create') }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus mr-1"></i> Tambah
+                    </a>
+                </div>
             </div>
         </div>
 
