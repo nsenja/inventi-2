@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\BarangMasuk;
 use App\Models\Barang;
+use App\Models\Kategori;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class BarangMasukController extends Controller
@@ -14,10 +15,26 @@ class BarangMasukController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    // public function index()
+    // {
+    //     $barangMasuk = BarangMasuk::with('barang.kategori')->get();
+    //     return view('admin.barangMasuk.index', compact('barangMasuk'));
+    // }
+    public function index(Request $request)
     {
-        $barangMasuk = BarangMasuk::with('barang.kategori')->get();
-        return view('admin.barangMasuk.index', compact('barangMasuk'));
+        $query = BarangMasuk::with('barang.kategori');
+
+        if ($request->filled('search')) {
+            $query->whereHas('barang', function ($q) use ($request) {
+                $q->where('nama_barang', 'like', '%' . $request->search . '%')
+                    ->orWhere('kode_barang', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $barangMasuk = $query->orderBy('tanggal_masuk', 'desc')->get();
+        $kategoris = Kategori::all();
+
+        return view('admin.barangMasuk.index', compact('barangMasuk', 'kategoris'));
     }
 
     /**
@@ -116,21 +133,50 @@ class BarangMasukController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function cetak()
+    // public function cetak()
+    // {
+    //     $barangMasuk = BarangMasuk::with('barang.kategori')
+    //         ->orderBy('tanggal_masuk', 'asc')
+    //         ->get();
+
+    //     // Debug: uncomment jika ingin memastikan data sudah benar
+    //     // dd($barangMasuk->toArray());
+
+    //     // Muat view Blade ke dalam PDF, atur orientasi landscape
+    //     $pdf = PDF::loadView('admin.laporan.barang_masuk_cetak', compact('barangMasuk'))
+    //         ->setPaper('a4', 'potrait')
+    //         ->setOption('isHtml5ParserEnabled', true);
+
+    //     // Tampilkan PDF di browser tanpa mengunduh
+    //     return $pdf->stream('laporan-barang-masuk.pdf');
+    // }
+
+    public function cetak(Request $request)
     {
-        $barangMasuk = BarangMasuk::with('barang.kategori')
-            ->orderBy('tanggal_masuk', 'asc')
-            ->get();
+        $query = BarangMasuk::with('barang.kategori');
 
-        // Debug: uncomment jika ingin memastikan data sudah benar
-        // dd($barangMasuk->toArray());
+        if ($request->filled('category_id')) {
+            $query->whereHas('barang', function ($q) use ($request) {
+                $q->where('category_id', $request->category_id);
+            });
+        }
 
-        // Muat view Blade ke dalam PDF, atur orientasi landscape
+        if ($request->filled('bulan')) {
+            $query->whereMonth('tanggal_masuk', $request->bulan);
+        }
+
+        if ($request->filled('tahun')) {
+            $query->whereYear('tanggal_masuk', $request->tahun);
+        }
+
+        $barangMasuk = $query->orderBy('tanggal_keluar', 'asc')->get();
+
         $pdf = PDF::loadView('admin.laporan.barang_masuk_cetak', compact('barangMasuk'))
-            ->setPaper('a4', 'potrait')
+            ->setPaper('a4', 'portrait')
             ->setOption('isHtml5ParserEnabled', true);
-        
-        // Tampilkan PDF di browser tanpa mengunduh
+
+        $pdf->getDomPDF()->setBasePath(public_path());
+
         return $pdf->stream('laporan-barang-masuk.pdf');
     }
 }

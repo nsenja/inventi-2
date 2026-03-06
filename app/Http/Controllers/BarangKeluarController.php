@@ -10,31 +10,31 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class BarangKeluarController extends Controller
 {
-    
+
     // public function index()
     // {
     //     $barangKeluar = BarangKeluar::with('barang')->latest()->get();
     //      $kategoris = Kategori::all();
     //      return view('admin.barangKeluar.index', compact('barangKeluar','kategoris'));
-    
+
     //     }
 
-     public function index(Request $request)
-{
-    $query = BarangKeluar::with('barang.kategori');
+    public function index(Request $request)
+    {
+        $query = BarangKeluar::with('barang.kategori');
 
-    if ($request->filled('search')) {
-        $query->whereHas('barang', function ($q) use ($request) {
-            $q->where('nama_barang', 'like', '%' . $request->search . '%')
-              ->orWhere('kode_barang', 'like', '%' . $request->search . '%');
-        });
+        if ($request->filled('search')) {
+            $query->whereHas('barang', function ($q) use ($request) {
+                $q->where('nama_barang', 'like', '%' . $request->search . '%')
+                    ->orWhere('kode_barang', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $barangKeluar = $query->orderBy('tanggal_keluar', 'desc')->get();
+        $kategoris = Kategori::all();
+
+        return view('admin.barangKeluar.index', compact('barangKeluar', 'kategoris'));
     }
-
-    $barangKeluar = $query->orderBy('tanggal_keluar', 'desc')->get();
-    $kategoris = Kategori::all();
-
-    return view('admin.barangKeluar.index', compact('barangKeluar', 'kategoris'));
-}
 
     public function create()
     {
@@ -45,41 +45,41 @@ class BarangKeluarController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-        'barang_id' => 'required|exists:barangs,id',
-        'jumlah' => 'required|integer|min:1',
-        'tanggal_keluar' => 'required|date',
-        'catatan' => 'nullable|string',
-        'bukti' => 'nullable|image|mimes:jpg,jpeg,png,pdf|max:2048',
-    ]);
+            'barang_id' => 'required|exists:barangs,id',
+            'jumlah' => 'required|integer|min:1',
+            'tanggal_keluar' => 'required|date',
+            'catatan' => 'nullable|string',
+            'bukti' => 'nullable|image|mimes:jpg,jpeg,png,pdf|max:2048',
+        ]);
 
-    
-    $barang = Barang::findOrFail($request->barang_id);
 
-    // ✅ Cek apakah stok mencukupi
-    if ($request->jumlah > $barang->jumlah) {
-        return back()->withErrors(['jumlah' => 'Stok barang tidak cukup!'])->withInput();
+        $barang = Barang::findOrFail($request->barang_id);
+
+        // ✅ Cek apakah stok mencukupi
+        if ($request->jumlah > $barang->jumlah) {
+            return back()->withErrors(['jumlah' => 'Stok barang tidak cukup!'])->withInput();
+        }
+
+        // ✅ Simpan file bukti jika ada
+        $buktiPath = null;
+        if ($request->hasFile('bukti')) {
+            $buktiPath = $request->file('bukti')->store('bukti_keluar', 'public');
+        }
+
+        // ✅ Simpan barang keluar
+        BarangKeluar::create([
+            'barang_id' => $request->barang_id,
+            'jumlah' => $request->jumlah,
+            'tanggal_keluar' => $request->tanggal_keluar,
+            'catatan' => $request->catatan,
+            'bukti' => $buktiPath,
+        ]);
+
+        // ✅ Kurangi stok barang
+        $barang->decrement('jumlah', $request->jumlah);
+
+        return redirect()->route('barang-keluar.index')->with('success', 'Barang keluar berhasil ditambahkan!');
     }
-
-    // ✅ Simpan file bukti jika ada
-    $buktiPath = null;
-    if ($request->hasFile('bukti')) {
-        $buktiPath = $request->file('bukti')->store('bukti_keluar', 'public');
-    }
-
-    // ✅ Simpan barang keluar
-    BarangKeluar::create([
-        'barang_id' => $request->barang_id,
-        'jumlah' => $request->jumlah,
-        'tanggal_keluar' => $request->tanggal_keluar,
-        'catatan' => $request->catatan,
-        'bukti' => $buktiPath,
-    ]);
-
-    // ✅ Kurangi stok barang
-    $barang->decrement('jumlah', $request->jumlah);
-
-    return redirect()->route('barang-keluar.index')->with('success', 'Barang keluar berhasil ditambahkan!');
-}
 
     public function edit(BarangKeluar $barangKeluar)
     {
@@ -130,7 +130,7 @@ class BarangKeluarController extends Controller
         $barangKeluar->delete();
 
         return redirect()->route('barang-keluar.index')->with('success', 'Barang keluar berhasil dihapus.');
-    }       
+    }
 
     // public function cetak()
     // {
@@ -145,38 +145,37 @@ class BarangKeluarController extends Controller
     //     $pdf = PDF::loadView('admin.laporan.barang_keluar_cetak', compact('barangKeluar'))
     //         ->setPaper('a4', 'potrait')
     //         ->setOption('isHtml5ParserEnabled', true);
-        
+
     //     // Tampilkan PDF di browser tanpa mengunduh
     //     return $pdf->stream('laporan-barang-keluar.pdf');
     // }
 
-  public function cetak(Request $request)
-{
-    $query = BarangKeluar::with('barang.kategori');
+    public function cetak(Request $request)
+    {
+        $query = BarangKeluar::with('barang.kategori');
 
-    if ($request->filled('category_id')) {
-        $query->whereHas('barang', function ($q) use ($request) {
-            $q->where('category_id', $request->category_id);
-        });
+        if ($request->filled('category_id')) {
+            $query->whereHas('barang', function ($q) use ($request) {
+                $q->where('category_id', $request->category_id);
+            });
+        }
+
+        if ($request->filled('bulan')) {
+            $query->whereMonth('tanggal_keluar', $request->bulan);
+        }
+
+        if ($request->filled('tahun')) {
+            $query->whereYear('tanggal_keluar', $request->tahun);
+        }
+
+        $barangKeluar = $query->orderBy('tanggal_keluar', 'asc')->get();
+
+        $pdf = PDF::loadView('admin.laporan.barang_keluar_cetak', compact('barangKeluar'))
+            ->setPaper('a4', 'portrait')
+            ->setOption('isHtml5ParserEnabled', true);
+
+        $pdf->getDomPDF()->setBasePath(public_path());
+
+        return $pdf->stream('laporan-barang-keluar.pdf');
     }
-
-    if ($request->filled('bulan')) {
-        $query->whereMonth('tanggal_keluar', $request->bulan);
-    }
-
-    if ($request->filled('tahun')) {
-        $query->whereYear('tanggal_keluar', $request->tahun);
-    }
-
-    $barangKeluar = $query->orderBy('tanggal_keluar', 'asc')->get();
-
-    $pdf = PDF::loadView('admin.laporan.barang_keluar_cetak', compact('barangKeluar'))
-        ->setPaper('a4', 'portrait')
-        ->setOption('isHtml5ParserEnabled', true);
-
-    $pdf->getDomPDF()->setBasePath(public_path());
-
-    return $pdf->stream('laporan-barang-keluar.pdf');
 }
-}
-

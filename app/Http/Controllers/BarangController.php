@@ -15,20 +15,20 @@ class BarangController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-   public function index(Request $request)
-{
-    $query = Barang::with('kategori');
+    public function index(Request $request)
+    {
+        $query = Barang::with('kategori');
 
-    if ($request->filled('search')) {
-        $query->where('nama_barang', 'like', '%' . $request->search . '%')
-              ->orWhere('kode_barang', 'like', '%' . $request->search . '%');
+        if ($request->filled('search')) {
+            $query->where('nama_barang', 'like', '%' . $request->search . '%')
+                ->orWhere('kode_barang', 'like', '%' . $request->search . '%');
+        }
+
+        $barang = $query->get();
+        $kategoris = Kategori::all();
+
+        return view('admin.barang.index', compact('barang', 'kategoris'));
     }
-
-    $barang = $query->get();
-    $kategoris = Kategori::all();
-
-    return view('admin.barang.index', compact('barang', 'kategoris'));
-}
 
 
     /**
