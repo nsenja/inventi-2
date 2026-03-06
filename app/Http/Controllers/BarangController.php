@@ -146,18 +146,24 @@ class BarangController extends Controller
         $query->where('category_id', $request->category_id);
     }
 
+    if ($request->filled('bulan')) {
+        $query->whereMonth('created_at', $request->bulan);
+    }
+
+    if ($request->filled('tahun')) {
+        $query->whereYear('created_at', $request->tahun);
+    }
+
     $barang = $query->orderBy('nama_barang')->get();
 
     $pdf = PDF::loadView('admin.laporan.barang_cetak', compact('barang'))
-          ->setPaper('a4', 'portrait')
-          ->setOption('isHtml5ParserEnabled', true);
+        ->setPaper('a4', 'portrait')
+        ->setOption('isHtml5ParserEnabled', true);
 
-    // Jika ingin kirim param supaya blade tahu ini pdf
     $pdf->getDomPDF()->setBasePath(public_path());
 
     return $pdf->stream('laporan-barang.pdf');
-
-    }
+}
 
 
 }
